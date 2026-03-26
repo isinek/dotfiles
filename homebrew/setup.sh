@@ -24,4 +24,8 @@ for file in "${SCRIPT_DIR}/Brewfile"; do
   fi
 done
 brew bundle
+
+if command -v dotnet >/dev/null 2>&1; then
+  dotnet tool update --global csharp-ls || dotnet tool install --global csharp-ls
+fi
 popd &> /dev/null

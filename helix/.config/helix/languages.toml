@@ -10,10 +10,10 @@ language-servers = ["vscode-css-language-server", "tailwindcss-language-server"]
 [[language]]
 name = "c-sharp"
 scope = "source.csharp"
-roots = ["*.csproj", "*.sln"]
+roots = ["global.json", "*.csproj", "*.sln"]
 file-types = ["cs"]
 formatter = { command = "dotnet", args = ["format"] }
-language-servers = ["omnisharp"]
+language-servers = ["csharp-ls"]
 
 [[language]]
 name = "go"
@@ -22,7 +22,7 @@ injection-regex = "go"
 file-types = ["go"]
 roots = ["go.mod"]
 auto-format = true
-language-servers = ["gopls", "harper"]
+language-servers = ["gopls"]
 
 [[language]]
 name = "html"
@@ -37,15 +37,18 @@ language-servers = [
 [[language]]
 name = "javascript"
 formatter = { command = "prettier", args = ["--parser", "typescript"] }
+auto-format = false
 
 [[language]]
 name = "json"
 formatter = { command = "prettier", args = ["--parser", "json"] }
+auto-format = false
 language-servers = ["vscode-json-language-server"]
 
 [[language]]
 name = "jsx"
 formatter = { command = "prettier", args = ["--parser", "typescript"] }
+auto-format = false
 language-servers = ["typescript-language-server", "tailwindcss-language-server"]
 
 [[language]]
@@ -62,30 +65,35 @@ formatter = { command = "prettier", args = [
   "--stdin-filepath",
   "%{buffer_name}",
 ] }
+auto-format = true
 indent = { tab-width = 2, unit = "  " }
 language-servers = ["postgres-language-server"]
-auto-format = true
 
 [[language]]
 name = "toml"
-formatter = { command = "prettier", args = [
-  "--plugin",
-  "prettier-plugin-toml",
-  "--stdin-filepath",
-  "%{buffer_name}",
-] }
-language-servers = ["taplo"]
+formatter = { command = "taplo", args = ["fmt", "-"] }
 auto-format = true
+language-servers = ["taplo"]
 
 [[language]]
 name = "typescript"
 formatter = { command = "prettier", args = ["--parser", "typescript"] }
+auto-format = false
 language-servers = ["typescript-language-server", "tailwindcss-language-server"]
 
 [[language]]
 name = "tsx"
 formatter = { command = "prettier", args = ["--parser", "typescript"] }
+auto-format = false
 language-servers = ["typescript-language-server", "tailwindcss-language-server"]
+
+[[language]]
+name = "xml"
+scope = "source.xml"
+file-types = ["xml"]
+formatter = { command = "prettier", args = ["--parser", "xml"] }
+auto-format = true
+indent = { tab-width = 2, unit = "  " }
 
 [[language]]
 name = "yaml"
@@ -101,6 +109,11 @@ language-servers = ["yaml-language-server"]
 ####################
 # Language Servers #
 ####################
+
+[language-server.csharp-ls]
+command = "csharp-ls"
+timeout = 120
+environment = { "DOTNET_ROOT" = "/usr/local/share/dotnet" }
 
 [language-server.gopls]
 command = "gopls"
@@ -119,10 +132,7 @@ hints = { "assignVariableType" = true, "compositeLiteralFields" = true, "composi
 [language-server.harper]
 command = "harper-ls"
 args = ["--stdio"]
-
-[language-server.omnisharp]
-command = "OmniSharp"
-args = ["--languageserver", "--stdio"]
+config = { harper-ls = { diagnosticSeverity = "error", linters = { long_sentences = false } } }
 
 [language-server.postgres-language-server]
 command = "postgres-language-server"
@@ -135,6 +145,7 @@ args = ["--stdio"]
 [language-server.taplo]
 command = "taplo"
 args = ["lsp", "stdio"]
+environment = { "RUST_LOG" = "error" }
 
 [language-server.typescript-language-server]
 command = "typescript-language-server"

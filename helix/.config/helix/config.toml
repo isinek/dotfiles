@@ -73,6 +73,7 @@ separator = "│"
 "$" = "goto_line_end"
 "^" = "goto_first_nonwhitespace"
 C-g = [":new", ":insert-output lazygit", ":buffer-close!", ":redraw"]
+C-y = [":new", ":insert-output yazi", ":buffer-close!", ":redraw"]
 
 [keys.normal.space.f]
 f = "file_picker_in_current_directory"
