@@ -1,0 +1,13 @@
+# shellcheck shell=bash
+
+export GOPRIVATE="github.com/Fonoa-Tech/*"
+
+# asdf
+path_prepend "${ASDF_DATA_DIR:-$HOME/.asdf}/shims"
+# asdf end
+
+# 1password completion
+if command -v op >/dev/null 2>&1; then
+  eval "$(op completion bash)"
+fi
+# 1password completion end

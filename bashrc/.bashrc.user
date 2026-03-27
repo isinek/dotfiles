@@ -1,5 +1,16 @@
+# shellcheck shell=bash
+# shellcheck source=/dev/null
+
+path_prepend () {
+  case ":$PATH:" in
+    *":$1:"*) ;;
+    *) PATH="$1:$PATH" ;;
+  esac
+}
+
 # load aliases
 [ -r ~/.bash_aliases ] && . ~/.bash_aliases
+[ -r ~/.bashrc.work ] && . ~/.bashrc.work
 
 # Don't put duplicate lines in the history and do not add lines that start with a space
 export HISTCONTROL=erasedups:ignoredups:ignorespace
@@ -31,7 +42,7 @@ if echo "$-" | grep -q i; then
 fi
 
 # Set the default editor
-if ! command -v hx >/dev/null 2>&1; then
+if command -v hx >/dev/null 2>&1; then
   export EDITOR=hx
   export VISUAL=hx
 fi
@@ -40,63 +51,93 @@ fi
 # Set vi mode
 set -o vi
 
+# Local tools
+path_prepend "$HOME/tools"
+
 # HomeBrew
-if ! command -v brew >/dev/null 2>&1; then
-  BREW_PREFIX=$(brew --prefix)
-  eval "$($BREW_PREFIX/bin/brew shellenv)"
-  export PATH="$BREW_PREFIX/opt/grep/libexec/gnubin:$PATH"
+if command -v brew >/dev/null 2>&1; then
+  BREW_PREFIX="$(brew --prefix)"
+  eval "$("${BREW_PREFIX}"/bin/brew shellenv)"
+  path_prepend "${BREW_PREFIX}/bin"
+  path_prepend "${BREW_PREFIX}/sbin"
+  path_prepend "${BREW_PREFIX}/opt/grep/libexec/gnubin"
 fi
 # HomeBrew end
 
 # coreutils
-if ! command -v brew >/dev/null 2>&1; then
-  export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
+if command -v brew >/dev/null 2>&1; then
+  path_prepend "$(brew --prefix coreutils)/libexec/gnubin"
 fi
 # coreutils end
 
 # starship
-if ! command -v starship >/dev/null 2>&1; then
+if command -v starship >/dev/null 2>&1; then
   eval "$(starship init bash)"
 fi
 # starship end
 
 # dotnet
 if ! command -v dotnet >/dev/null 2>&1; then
-  export PATH="$PATH:/Users/ivan.sinek/.dotnet"
-  export DOTNET_ROOT="/Users/ivan.sinek/.dotnet"
-  export PATH="$PATH:/Users/ivan.sinek/.dotnet/tools"
-  export PATH="$PATH:/Users/ivan.sinek/omnisharp"
+  path_prepend "$HOME/.dotnet"
+  path_prepend "$HOME/.dotnet/tools"
+  export DOTNET_ROOT="$HOME/.dotnet"
 fi
 # dotnet end
 
 # gawk
-if ! command -v gawk >/dev/null 2>&1; then
-  export PATH="$(brew --prefix gawk)/libexec/gnubin:$PATH"
+if command -v brew >/dev/null 2>&1 && ! command -v gawk >/dev/null 2>&1; then
+  path_prepend "$(brew --prefix gawk)/libexec/gnubin"
 fi
 # gawk end
 
 # pnpm
 if ! command -v pnpm >/dev/null 2>&1; then
-  export PNPM_HOME="/Users/ivan.sinek/Library/pnpm"
-  case ":$PATH:" in
-    *":$PNPM_HOME:"*) ;;
-    *) export PATH="$PNPM_HOME:$PATH" ;;
-  esac
+  if [ "$(uname -s)" = "Darwin" ]; then
+    export PNPM_HOME="$HOME/Library/pnpm"
+  else
+    export PNPM_HOME="$HOME/.local/share/pnpm"
+  fi
+  path_prepend "$PNPM_HOME"
 fi
 # pnpm end
 
-# 1password completion
-if ! command -v op >/dev/null 2>&1; then
-  eval "$(op completion bash)"
+# GitHub CLI completion
+if command -v gh >/dev/null 2>&1; then
+  eval "$(gh completion -s bash)"
 fi
-# 1password completion end
+# GitHub CLI completion end
 
 # fzf
-if ! command -v fzf >/dev/null 2>&1; then
+if command -v fzf >/dev/null 2>&1; then
   eval "$(fzf --bash)"
 fi
 # fzf end
 
+# carapace
+if command -v carapace >/dev/null 2>&1; then
+  eval "$(carapace _carapace bash)"
+fi
+# carapace end
+
 # Bash completion
-[ -r $BREW_PREFIX/etc/profile.d/bash_completion.sh ] && . $BREW_PREFIX/etc/profile.d/bash_completion.sh
+[ -n "${BREW_PREFIX:-}" ] && [ -r "${BREW_PREFIX}/etc/profile.d/bash_completion.sh" ] && . "${BREW_PREFIX}/etc/profile.d/bash_completion.sh"
 # Bash completion end
+
+# glow
+if command -v glow >/dev/null 2>&1; then
+  eval "$(glow completion bash)"
+fi
+# glow end
+
+# GPG TTY for git signing
+if command -v tty >/dev/null 2>&1; then
+  GPG_TTY="$(tty)"
+  export GPG_TTY
+fi
+# GPG TTY for git signing end
+
+# codex
+if command -v codex >/dev/null 2>&1; then
+  eval "$(codex completion bash)"
+fi
+# codex end

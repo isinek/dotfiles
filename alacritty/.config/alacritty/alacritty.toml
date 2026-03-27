@@ -1,0 +1,23 @@
+[window]
+opacity = 0.95
+blur = true
+padding = { x = 6, y = 6 }
+
+[font]
+size = 11
+
+[font.normal]
+family = "Hasklug Nerd Font Mono"
+style = "Regular"
+
+[scrolling]
+history = 100000
+
+[selection]
+save_to_clipboard = true
+
+[terminal.shell]
+program = "/bin/bash"
+
+[general]
+import = []

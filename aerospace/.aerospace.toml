@@ -1,5 +1,4 @@
-# Place a copy of this config to ~/.aerospace.toml
-# After that, you can edit ~/.aerospace.toml to your liking
+# This file is symlinked to ~/.aerospace.toml by the setup script.
 
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
@@ -116,7 +115,7 @@ ctrl-alt-6 = 'workspace 6'
 # ctrl-alt-7 = 'workspace 7'
 # ctrl-alt-8 = 'workspace 8'
 # ctrl-alt-9 = 'workspace 9'
-# ctrl-alt-a = 'workspace A' # In your config, you can drop workspace bindings that you don't need
+# ctrl-alt-a = 'workspace A'
 # ctrl-alt-b = 'workspace B'
 # ctrl-alt-c = 'workspace C'
 # ctrl-alt-d = 'workspace D'
@@ -146,31 +145,6 @@ ctrl-alt-shift-3 = 'move-node-to-workspace 📙'
 ctrl-alt-shift-4 = 'move-node-to-workspace 💭'
 ctrl-alt-shift-5 = 'move-node-to-workspace 🏡'
 ctrl-alt-shift-6 = 'move-node-to-workspace 6'
-# ctrl-alt-shift-7 = 'move-node-to-workspace 7'
-# ctrl-alt-shift-8 = 'move-node-to-workspace 8'
-# ctrl-alt-shift-9 = 'move-node-to-workspace 9'
-# ctrl-alt-shift-a = 'move-node-to-workspace A'
-# ctrl-alt-shift-b = 'move-node-to-workspace B'
-# ctrl-alt-shift-c = 'move-node-to-workspace C'
-# ctrl-alt-shift-d = 'move-node-to-workspace D'
-# ctrl-alt-shift-e = 'move-node-to-workspace E'
-# ctrl-alt-shift-f = 'move-node-to-workspace F'
-# ctrl-alt-shift-g = 'move-node-to-workspace G'
-# ctrl-alt-shift-i = 'move-node-to-workspace I'
-# ctrl-alt-shift-m = 'move-node-to-workspace M'
-# ctrl-alt-shift-n = 'move-node-to-workspace N'
-# ctrl-alt-shift-o = 'move-node-to-workspace O'
-# ctrl-alt-shift-p = 'move-node-to-workspace P'
-# ctrl-alt-shift-q = 'move-node-to-workspace Q'
-# ctrl-alt-shift-r = 'move-node-to-workspace R'
-# ctrl-alt-shift-s = 'move-node-to-workspace S'
-# ctrl-alt-shift-t = 'move-node-to-workspace T'
-# ctrl-alt-shift-u = 'move-node-to-workspace U'
-# ctrl-alt-shift-v = 'move-node-to-workspace V'
-# ctrl-alt-shift-w = 'move-node-to-workspace W'
-# ctrl-alt-shift-x = 'move-node-to-workspace X'
-# ctrl-alt-shift-y = 'move-node-to-workspace Y'
-# ctrl-alt-shift-z = 'move-node-to-workspace Z'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 ctrl-alt-tab = 'workspace-back-and-forth'
@@ -184,15 +158,12 @@ ctrl-alt-shift-semicolon = 'mode service'
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
 esc = ['reload-config', 'mode main']
-r = ['flatten-workspace-tree', 'mode main'] # reset layout
+r = ['flatten-workspace-tree', 'mode main']
 f = [
   'layout floating tiling',
   'mode main',
-] # Toggle between floating and tiling layout
+]
 backspace = ['close-all-windows-but-current', 'mode main']
-
-# sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
-#s = ['layout sticky tiling', 'mode main']
 
 ctrl-alt-shift-left = ['join-with left', 'mode main']
 ctrl-alt-shift-down = ['join-with down', 'mode main']
@@ -203,7 +174,6 @@ down = 'volume down'
 up = 'volume up'
 shift-down = ['volume set 0', 'mode main']
 
-# Default app placement
 [[on-window-detected]]
 if.app-id = 'com.google.Chrome'
 run = 'move-node-to-workspace 🌍'
@@ -213,7 +183,7 @@ if.app-id = 'com.1password.1password'
 run = 'move-node-to-workspace 🌍'
 
 [[on-window-detected]]
-if.app-id = 'org.aalcritty'
+if.app-id = 'org.alacritty'
 run = 'move-node-to-workspace 🎮'
 
 [[on-window-detected]]

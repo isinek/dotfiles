@@ -25,6 +25,13 @@ auto-format = true
 language-servers = ["gopls"]
 
 [[language]]
+name = "bash"
+scope = "source.bash"
+file-types = ["sh", "bash"]
+formatter = { command = "shfmt", args = ["-i", "2"] }
+auto-format = true
+
+[[language]]
 name = "html"
 file-types = ["html", "tmpl"]
 formatter = { command = "prettier", args = ["--parser", "html"] }
@@ -59,12 +66,7 @@ language-servers = ["marksman", "harper"]
 [[language]]
 name = "sql"
 file-types = ["sql"]
-formatter = { command = "prettier", args = [
-  "--plugin",
-  "prettier-plugin-sql",
-  "--stdin-filepath",
-  "%{buffer_name}",
-] }
+formatter = { command = "prettier", args = ["--parser", "sql", "--stdin-filepath", "%{buffer_name}"] }
 auto-format = true
 indent = { tab-width = 2, unit = "  " }
 language-servers = ["postgres-language-server"]
@@ -96,6 +98,13 @@ auto-format = true
 indent = { tab-width = 2, unit = "  " }
 
 [[language]]
+name = "zsh"
+scope = "source.zsh"
+file-types = ["zsh"]
+formatter = { command = "shfmt", args = ["-i", "2"] }
+auto-format = true
+
+[[language]]
 name = "yaml"
 scope = "source.yaml"
 injection-regex = "yml|yaml"
@@ -113,7 +122,6 @@ language-servers = ["yaml-language-server"]
 [language-server.csharp-ls]
 command = "csharp-ls"
 timeout = 120
-environment = { "DOTNET_ROOT" = "/usr/local/share/dotnet" }
 
 [language-server.gopls]
 command = "gopls"
@@ -144,8 +152,8 @@ args = ["--stdio"]
 
 [language-server.taplo]
 command = "taplo"
-args = ["lsp", "stdio"]
-environment = { "RUST_LOG" = "error" }
+args = ["lsp", "stdio", "--colors", "never"]
+environment = { "RUST_LOG" = "taplo=error" }
 
 [language-server.typescript-language-server]
 command = "typescript-language-server"

@@ -1,31 +1,19 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -eufCo pipefail
 
 TOOL="$( basename "$(dirname "$0")" )"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck disable=SC1091
+source "${SCRIPT_DIR}/../lib/setup.sh"
 
-if ! command -v "${TOOL}" >/dev/null 2>&1; then
-  if command -v brew >/dev/null 2>&1; then
-    echo "Installing ${TOOL} using brew..."
-    brew install "${TOOL}"
-  else
-    echo "Install ${TOOL} manually"
-    exit
-  fi
+if ! is_macos; then
+  echo "Skipping ${TOOL}: supported only on macOS."
+  exit 0
 fi
 
-pushd ~/.config/ &> /dev/null
-for file in "${SCRIPT_DIR}/.config/${TOOL}"; do
-  conf_file="$( basename "${file}" )"
-  if [[ -e "${conf_file}" || -L "${conf_file}" ]]; then
-    read -p "File already exists. Make a backup and replace it? (y/n): " answer
-    if [[ "${answer}" =~ ^[Yy] ]]; then
-      mv "${conf_file}" "${conf_file}.bak"
-      ln -s "${file}"
-    fi
-  else
-    ln -s "${file}"
-  fi
-done
-popd &> /dev/null
+install_brew_cask_if_missing "${TOOL}" "${TOOL}"
+
+link_file_with_backup \
+  "${SCRIPT_DIR}/.aerospace.toml" \
+  "${HOME}/.aerospace.toml"

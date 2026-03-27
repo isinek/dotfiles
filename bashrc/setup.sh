@@ -1,25 +1,24 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -eufCo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck disable=SC1091
+source "${SCRIPT_DIR}/../lib/setup.sh"
 
-if ! grep -q ".bashrc.user" ~/.bashrc; then
+if grep -Eq '^[[:space:]]*\[ -r ~/.bashrc\.user \] && \. ~/.bashrc\.user[[:space:]]*$' "${HOME}/.bashrc"; then
+  echo "${HOME}/.bashrc already sources ~/.bashrc.user, skipping bashrc setup"
+  exit 0
+fi
+
+if ! grep -q ".bashrc.user" "${HOME}/.bashrc"; then
   echo >> ~/.bashrc
   echo "[ -r ~/.bashrc.user ] && . ~/.bashrc.user" >> ~/.bashrc
 fi
 
-pushd ~/ &> /dev/null
-for file in "${SCRIPT_DIR}/.bashrc.user" "${SCRIPT_DIR}/.bash_aliases"; do
-  conf_file="$( basename "${file}" )"
-  if [[ -e "${conf_file}" || -L "${conf_file}" ]]; then
-    read -p "File already exists. Make a backup and replace it? (y/n): " answer
-    if [[ "${answer}" =~ ^[Yy] ]]; then
-      mv "${conf_file}" "${conf_file}.bak"
-      ln -s "${file}"
-    fi
-  else
-    ln -s "${file}"
-  fi
-done
-popd &> /dev/null
+link_file_with_backup "${SCRIPT_DIR}/.bashrc.user" "${HOME}/.bashrc.user"
+link_file_with_backup "${SCRIPT_DIR}/.bash_aliases" "${HOME}/.bash_aliases"
+
+if [ "${WORK_SETUP:-0}" = "1" ]; then
+  link_file_with_backup "${SCRIPT_DIR}/.bashrc.work" "${HOME}/.bashrc.work"
+fi
