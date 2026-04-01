@@ -10,6 +10,8 @@ path_prepend () {
 
 # load aliases
 [ -r ~/.bash_aliases ] && . ~/.bash_aliases
+
+# load work setup
 [ -r ~/.bashrc.work ] && . ~/.bashrc.work
 
 # Don't put duplicate lines in the history and do not add lines that start with a space
@@ -23,7 +25,7 @@ HISTSIZE=100000
 HISTFILESIZE=100000
 
 # Save and reload the history after each command finishes
-export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+# export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -47,9 +49,6 @@ if command -v hx >/dev/null 2>&1; then
   export VISUAL=hx
 fi
 # Set the default editor end
-
-# Set vi mode
-set -o vi
 
 # Local tools
 path_prepend "$HOME/tools"
@@ -77,9 +76,16 @@ fi
 # starship end
 
 # dotnet
-if ! command -v dotnet >/dev/null 2>&1; then
+path_prepend "$HOME/.dotnet/tools"
+
+if [ -x "/opt/homebrew/opt/dotnet/libexec/dotnet" ]; then
+  path_prepend "/opt/homebrew/opt/dotnet/libexec"
+  export DOTNET_ROOT="/opt/homebrew/opt/dotnet/libexec"
+elif [ -x "/usr/local/share/dotnet/dotnet" ]; then
+  path_prepend "/usr/local/share/dotnet"
+  export DOTNET_ROOT="/usr/local/share/dotnet"
+elif [ -x "$HOME/.dotnet/dotnet" ]; then
   path_prepend "$HOME/.dotnet"
-  path_prepend "$HOME/.dotnet/tools"
   export DOTNET_ROOT="$HOME/.dotnet"
 fi
 # dotnet end
@@ -89,17 +95,6 @@ if command -v brew >/dev/null 2>&1 && ! command -v gawk >/dev/null 2>&1; then
   path_prepend "$(brew --prefix gawk)/libexec/gnubin"
 fi
 # gawk end
-
-# pnpm
-if ! command -v pnpm >/dev/null 2>&1; then
-  if [ "$(uname -s)" = "Darwin" ]; then
-    export PNPM_HOME="$HOME/Library/pnpm"
-  else
-    export PNPM_HOME="$HOME/.local/share/pnpm"
-  fi
-  path_prepend "$PNPM_HOME"
-fi
-# pnpm end
 
 # GitHub CLI completion
 if command -v gh >/dev/null 2>&1; then

@@ -44,7 +44,7 @@ function run_setup() {
 WORK_SETUP=0
 
 while getopts "hw" opt; do
-  case $opt in
+  case ${opt} in
   h)
     usage
     exit 0

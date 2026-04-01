@@ -7,11 +7,8 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "${SCRIPT_DIR}/../lib/setup.sh"
 
 if grep -Eq '^[[:space:]]*\[ -r ~/.bashrc\.user \] && \. ~/.bashrc\.user[[:space:]]*$' "${HOME}/.bashrc"; then
-  echo "${HOME}/.bashrc already sources ~/.bashrc.user, skipping bashrc setup"
-  exit 0
-fi
-
-if ! grep -q ".bashrc.user" "${HOME}/.bashrc"; then
+  echo "${HOME}/.bashrc already sources ~/.bashrc.user, skipping ~/.bashrc update"
+elif ! grep -q ".bashrc.user" "${HOME}/.bashrc"; then
   echo >> ~/.bashrc
   echo "[ -r ~/.bashrc.user ] && . ~/.bashrc.user" >> ~/.bashrc
 fi

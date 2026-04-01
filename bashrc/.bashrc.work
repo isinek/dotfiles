@@ -6,6 +6,17 @@ export GOPRIVATE="github.com/Fonoa-Tech/*"
 path_prepend "${ASDF_DATA_DIR:-$HOME/.asdf}/shims"
 # asdf end
 
+# pnpm
+if ! command -v pnpm >/dev/null 2>&1; then
+  if [ "$(uname -s)" = "Darwin" ]; then
+    export PNPM_HOME="$HOME/Library/pnpm"
+  else
+    export PNPM_HOME="$HOME/.local/share/pnpm"
+  fi
+  path_prepend "$PNPM_HOME"
+fi
+# pnpm end
+
 # 1password completion
 if command -v op >/dev/null 2>&1; then
   eval "$(op completion bash)"

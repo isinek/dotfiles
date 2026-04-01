@@ -40,5 +40,13 @@ fi
 brew bundle --file "${SCRIPT_DIR}/Brewfile"
 
 if command -v dotnet >/dev/null 2>&1; then
+  if [ -x "/opt/homebrew/opt/dotnet/libexec/dotnet" ]; then
+    export DOTNET_ROOT="/opt/homebrew/opt/dotnet/libexec"
+  elif [ -x "/usr/local/share/dotnet/dotnet" ]; then
+    export DOTNET_ROOT="/usr/local/share/dotnet"
+  elif [ -x "${HOME}/.dotnet/dotnet" ]; then
+    export DOTNET_ROOT="${HOME}/.dotnet"
+  fi
+
   dotnet tool update --global csharp-ls || dotnet tool install --global csharp-ls
 fi
