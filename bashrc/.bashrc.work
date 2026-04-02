@@ -1,6 +1,8 @@
 # shellcheck shell=bash
+# shellcheck source=/dev/null
 
 export GOPRIVATE="github.com/Fonoa-Tech/*"
+export DOCKER_DEFAULT_PLATFORM=linux/amd64
 
 # asdf
 path_prepend "${ASDF_DATA_DIR:-$HOME/.asdf}/shims"
