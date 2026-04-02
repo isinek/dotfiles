@@ -3,6 +3,7 @@
 set -eufCo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 # shellcheck disable=SC1091
 source "${SCRIPT_DIR}/../lib/setup.sh"
 
@@ -17,6 +18,6 @@ PRETTIER_PLUGINS=(
 
 npm install --global "${PRETTIER_PLUGINS[@]}"
 
-link_file_with_backup \
+link_file \
   "${SCRIPT_DIR}/.prettierrc" \
   "${HOME}/.prettierrc"

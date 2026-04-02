@@ -3,6 +3,12 @@
 set -eufCo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+BREWFILE_HOME="${SCRIPT_DIR}/Brewfile.home"
+BREWFILE_WORK="${SCRIPT_DIR}/Brewfile.work"
+TARGET_BREWFILE="${HOME}/Brewfile"
+
+# shellcheck disable=SC1091
+source "${SCRIPT_DIR}/../lib/setup.sh"
 
 if ! command -v brew >/dev/null 2>&1; then
   echo "Install homebrew..."
@@ -17,27 +23,29 @@ elif [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
-if [ "${WORK_SETUP:-0}" != "1" ]; then
-  export HOMEBREW_BUNDLE_BREW_SKIP="asdf protoc-gen-go-grpc protoc-gen-go protoc-gen-js tailscale"
-  export HOMEBREW_BUNDLE_CASK_SKIP="1password-cli 1password dbeaver-community postman slack"
-fi
-
 bash "${SCRIPT_DIR}/../bashrc/setup.sh"
 
-if [ ! -L "${HOME}/Brewfile" ] || [ "$(readlink "${HOME}/Brewfile" 2>/dev/null)" != "${SCRIPT_DIR}/Brewfile" ]; then
-  if [ -e "${HOME}/Brewfile" ] || [ -L "${HOME}/Brewfile" ]; then
-    read -r -p "Replace ${HOME}/Brewfile? Existing file will be moved to ${HOME}/Brewfile.bak (y/n): " answer
-    if [[ "${answer}" =~ ^[Yy]$ ]]; then
-      rm -rf "${HOME}/Brewfile.bak"
-      mv "${HOME}/Brewfile" "${HOME}/Brewfile.bak"
-      ln -sfn "${SCRIPT_DIR}/Brewfile" "${HOME}/Brewfile"
-    fi
-  else
-    ln -s "${SCRIPT_DIR}/Brewfile" "${HOME}/Brewfile"
-  fi
+tmp_brewfile="$(mktemp "${HOME}/Brewfile.XXXXXX")"
+trap 'rm -f "${tmp_brewfile}"' EXIT
+
+cat "${BREWFILE_HOME}" >>"${tmp_brewfile}"
+if [ "${WORK_SETUP:-0}" = "1" ]; then
+  echo >>"${tmp_brewfile}"
+  cat "${BREWFILE_WORK}" >>"${tmp_brewfile}"
 fi
 
-brew bundle --file "${SCRIPT_DIR}/Brewfile"
+if ! cmp -s "${tmp_brewfile}" "${TARGET_BREWFILE}"; then
+  if ! prompt_backup "${TARGET_BREWFILE}"; then
+    echo "backup skipped: ${TARGET_BREWFILE}"
+  else
+    rm -rf "${TARGET_BREWFILE}.bak"
+    mv "${TARGET_BREWFILE}" "${TARGET_BREWFILE}.bak"
+  fi
+
+  mv "${tmp_brewfile}" "${TARGET_BREWFILE}"
+fi
+
+brew bundle --file "${TARGET_BREWFILE}"
 
 if command -v dotnet >/dev/null 2>&1; then
   if [ -x "/opt/homebrew/opt/dotnet/libexec/dotnet" ]; then

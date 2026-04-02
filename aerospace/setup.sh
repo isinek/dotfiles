@@ -2,8 +2,9 @@
 
 set -eufCo pipefail
 
-TOOL="$( basename "$(dirname "$0")" )"
+TOOL="$(basename "$(dirname "$0")")"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 # shellcheck disable=SC1091
 source "${SCRIPT_DIR}/../lib/setup.sh"
 
@@ -12,8 +13,8 @@ if ! is_macos; then
   exit 0
 fi
 
-install_brew_cask_if_missing "${TOOL}" "${TOOL}"
+install_brew_formula_if_missing "${TOOL}" "${TOOL}" "cask"
 
-link_file_with_backup \
+link_file \
   "${SCRIPT_DIR}/.aerospace.toml" \
   "${HOME}/.aerospace.toml"

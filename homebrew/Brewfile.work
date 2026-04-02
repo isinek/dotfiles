@@ -1,0 +1,19 @@
+# work
+brew "asdf"
+brew "colima"
+brew "docker-credential-helper"
+brew "protoc-gen-go-grpc"
+brew "protoc-gen-go"
+brew "protoc-gen-js"
+brew "tailscale"
+
+if OS.mac?
+  # casks
+  cask "1password-cli"
+  cask "1password"
+  cask "dbeaver-community"
+  cask "mysql-shell"
+  cask "postman"
+  cask "slack"
+  cask "temurin"
+end

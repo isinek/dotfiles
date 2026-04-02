@@ -24,15 +24,14 @@ Enable work-only packages and apps:
 
 ## Targets
 
-- `homebrew`: installs CLI tools and apps from `homebrew/Brewfile`
+- `homebrew`: installs CLI tools and apps from `homebrew/Brewfile.home`, plus `homebrew/Brewfile.work` in work mode
 - `bashrc`: links `~/.bashrc.user` and `~/.bash_aliases`, and links `~/.bashrc.work` only in work mode
 - `helix`: links Helix config files
 - `ghostty`: installs Ghostty on macOS and links its config
-- `alacritty`: installs Alacritty and links its config
 - `aerospace`: macOS-only; installs AeroSpace and links `~/.aerospace.toml`
 - `tmux`: links tmux config and installs TPM
 - `starship`: installs and links Starship config
-- `gh`: installs GitHub CLI and links its config
+- `gh`: installs GitHub CLI and links its non-secret config
 - `prettier`: installs Prettier, required plugins, and links `~/.prettierrc`
 
 ## Work Mode
@@ -54,6 +53,7 @@ Without `-w`, `homebrew/setup.sh` skips:
 `bashrc/.bashrc.work` is also only linked in work mode. That file currently contains:
 - `GOPRIVATE`
 - `asdf` shims on `PATH`
+- `PNPM_HOME`
 - `op` completion
 
 ## Behavior
@@ -61,7 +61,9 @@ Without `-w`, `homebrew/setup.sh` skips:
 - Setup scripts are intended to be rerunnable.
 - The repository is treated as read-only input. Setup scripts must only write outside the repo.
 - Most configs are symlinked into `$HOME`.
-- `bashrc/setup.sh` is a special case: if `~/.bashrc` already sources `~/.bashrc.user`, it exits without changing anything.
-- `homebrew/setup.sh` installs packages from `homebrew/Brewfile`.
+- `bashrc/setup.sh` is a special case: it creates `~/.bashrc` if needed, then ensures it sources `~/.bashrc.user`.
+- `homebrew/setup.sh` writes `~/Brewfile` from `homebrew/Brewfile.home` and appends `homebrew/Brewfile.work` in work mode.
+- If `~/Brewfile` already exists as a regular file with different contents, `homebrew/setup.sh` offers to back it up to `~/Brewfile.bak` before replacing it.
+- `gh/setup.sh` does not manage `~/.config/gh/hosts.yml`; `gh auth login` should own that file because it contains credentials.
 - macOS-only apps are gated in the Brewfile and skipped by setup scripts on Linux.
 - Linux support means Homebrew on Linux, not native Arch packages.

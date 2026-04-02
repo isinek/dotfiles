@@ -5,7 +5,7 @@ set -eufCo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 function usage() {
-  echo "usage: ${SCRIPT_DIR}/setup.sh [-w] <tool [tool [...]]>"
+  echo "usage: ${SCRIPT_DIR}/setup.sh [-w] <tool [tool [...]] | all>"
   echo "options:"
   echo "  -w    enable work-only setup targets"
   echo "tools:"
@@ -67,6 +67,15 @@ fi
 
 TOOLS=("$@")
 export WORK_SETUP
+
+if [[ "${TOOLS[*]}" =~ "all" ]]; then
+  mapfile -t TOOLS < <(
+    find "${SCRIPT_DIR}" -mindepth 1 -maxdepth 1 -type d \
+      ! -name '.git' \
+      ! -name 'lib' \
+      -exec basename {} \; | sort
+  )
+fi
 
 for tool in "${TOOLS[@]}"; do
   run_setup "${tool}"

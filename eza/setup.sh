@@ -13,5 +13,5 @@ source "${SCRIPT_DIR}/../lib/setup.sh"
 install_brew_formula_if_missing "${TOOL}" "${TOOL}"
 
 link_file \
-  "${SOURCE_DIR}/config.yml" \
-  "${DESTINATION_DIR}/config.yml"
+  "${SOURCE_DIR}/theme.yaml" \
+  "${DESTINATION_DIR}/theme.yaml"

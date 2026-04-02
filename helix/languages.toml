@@ -12,7 +12,6 @@ name = "c-sharp"
 scope = "source.csharp"
 roots = ["global.json", "*.csproj", "*.sln"]
 file-types = ["cs"]
-formatter = { command = "dotnet", args = ["format"] }
 language-servers = ["csharp-ls"]
 
 [[language]]

@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 
-alias ls='ls --color=auto'
-alias ll='ls -alh'
+alias eza='eza --icons=auto'
+alias ll='eza -al --git --icons=auto'
 alias less='less --RAW-CONTROL-CHARS'
 alias grep='grep --color=auto'
 
