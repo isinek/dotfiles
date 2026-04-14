@@ -1,19 +1,39 @@
 # work
-brew "asdf"
-brew "colima"
-brew "docker-credential-helper"
-brew "protoc-gen-go-grpc"
-brew "protoc-gen-go"
-brew "protoc-gen-js"
-brew "tailscale"
+
+# runtimes, version managers and SDKs
+brew "asdf"                           # version manager for development runtimes
+brew "dotnet"                         # .NET SDK and CLI
+
+# containers and infrastructure
+brew "colima"                         # lightweight local container runtime
+brew "docker-buildx"                  # extended Docker image builder
+brew "docker-compose"                 # multi-container Docker app orchestration
+brew "docker-credential-helper"       # Docker credential storage helper
+brew "stern"                          # multi-pod Kubernetes log tailer
+brew "tailscale"                      # mesh VPN and secure network access
+
+# development tooling
+brew "buf"                            # Protocol Buffers toolkit and linting
+
+# build and code generation
+brew "nx"                             # monorepo build system CLI
+brew "protoc-gen-go-grpc"             # Go gRPC code generator for Protocol Buffers
+brew "protoc-gen-go"                  # Go code generator for Protocol Buffers
+brew "protoc-gen-js"                  # JavaScript code generator for Protocol Buffers
 
 if OS.mac?
-  # casks
-  cask "1password-cli"
-  cask "1password"
-  cask "dbeaver-community"
-  cask "mysql-shell"
-  cask "postman"
-  cask "slack"
-  cask "temurin"
+  # security
+  cask "1password-cli"                # CLI for 1Password secrets and vault access
+  cask "1password"                    # password manager desktop app
+
+  # database and API tools
+  cask "dbeaver-community"            # database client and SQL IDE
+  cask "mysql-shell"                  # advanced MySQL command-line shell
+  cask "postman"                      # API development and testing app
+
+  # communication
+  cask "slack"                        # team chat and collaboration app
+
+  # runtimes
+  cask "temurin"                      # OpenJDK distribution from Eclipse Adoptium
 end

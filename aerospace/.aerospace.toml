@@ -159,10 +159,7 @@ ctrl-alt-shift-semicolon = 'mode service'
 [mode.service.binding]
 esc = ['reload-config', 'mode main']
 r = ['flatten-workspace-tree', 'mode main']
-f = [
-  'layout floating tiling',
-  'mode main',
-]
+f = ['layout floating tiling', 'mode main']
 backspace = ['close-all-windows-but-current', 'mode main']
 
 ctrl-alt-shift-left = ['join-with left', 'mode main']
@@ -203,5 +200,5 @@ run = 'move-node-to-workspace 💭'
 '🎮' = ['1', 'built-in']
 '📙' = ['2', 'built-in']
 '💭' = ['2', 'built-in']
-'🏡' = ['2', 'built-in']
-'6' = ['2', 'built-in']
+'🏡' = ['1', 'built-in']
+'6' = ['1', 'built-in']

@@ -1,14 +1,10 @@
 {
   "plugins": [
-    "prettier-plugin-sql",
-    "@prettier/plugin-xml",
-    "prettier-plugin-tailwindcss"
+    "prettier-plugin-sql"
   ],
   "overrides": [
     {
-      "files": [
-        "*.sql"
-      ],
+      "files": ["*.sql"],
       "options": {
         "parser": "sql",
         "language": "postgresql",

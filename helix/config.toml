@@ -31,6 +31,9 @@ tab = "all"
 [editor.indent-guides]
 render = true
 
+[editor.file-picker]
+hidden = false
+
 [editor.statusline]
 left = [
   "mode",

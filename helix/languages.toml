@@ -63,9 +63,19 @@ formatter = { command = "prettier", args = ["--parser", "markdown"] }
 language-servers = ["marksman", "harper"]
 
 [[language]]
+name = "protobuf"
+auto-format = true
+language-servers = ["buf"]
+
+[[language]]
 name = "sql"
 file-types = ["sql"]
-formatter = { command = "prettier", args = ["--parser", "sql", "--stdin-filepath", "%{buffer_name}"] }
+formatter = { command = "prettier", args = [
+  "--parser",
+  "sql",
+  "--stdin-filepath",
+  "%{buffer_name}",
+] }
 auto-format = true
 indent = { tab-width = 2, unit = "  " }
 language-servers = ["postgres-language-server"]
@@ -121,6 +131,10 @@ language-servers = ["yaml-language-server"]
 [language-server.csharp-ls]
 command = "csharp-ls"
 timeout = 120
+
+[language-server.buf]
+command = "buf"
+args = ["lsp", "serve"]
 
 [language-server.gopls]
 command = "gopls"
