@@ -86,3 +86,12 @@ b = "file_picker_in_current_buffer_directory"
 g = "global_search"
 e = "file_explorer"
 r = ":reload-all"
+
+[keys.normal.G]
+b = ":sh git blame --date=short -L %{cursor_line},+1 %{buffer_name} | sed -E 's/[0-9]+).*//' | sed 's/(//g'"
+B = [
+  ":sh echo %{buffer_name} > /tmp/git_blame_buffer",
+  ":new",
+  ":insert-output git blame --date=short `cat /tmp/git_blame_buffer`",
+]
+C-b = ":sh gh browse %{buffer_name}:%{cursor_line} -c=%sh{latest_pushed_commit}"

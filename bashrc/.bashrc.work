@@ -1,11 +1,14 @@
 # shellcheck shell=bash
 # shellcheck source=/dev/null
 
+# Local tools
+path_append "$HOME/tools"
+
 export GOPRIVATE="github.com/Fonoa-Tech/*"
 export DOCKER_DEFAULT_PLATFORM=linux/amd64
 
 # asdf
-path_prepend "${ASDF_DATA_DIR:-$HOME/.asdf}/shims"
+path_append "${ASDF_DATA_DIR:-$HOME/.asdf}/shims"
 # asdf end
 
 # pnpm
@@ -18,6 +21,12 @@ if ! command -v pnpm >/dev/null 2>&1; then
   path_prepend "$PNPM_HOME"
 fi
 # pnpm end
+
+# volta
+if command -v volta >/dev/null 2>&1; then
+  path_prepend "$HOME/.volta/bin"
+fi
+# volta end
 
 # 1password completion
 if command -v op >/dev/null 2>&1; then

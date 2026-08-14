@@ -13,6 +13,7 @@ brew "tmux"                           # terminal multiplexer
 brew "helix"                          # modal terminal text editor
 
 # file and text utilities
+brew "awk"                            # updated awk tool
 brew "bat"                            # cat clone with syntax highlighting
 brew "chafa"                          # render images in the terminal
 brew "coreutils"                      # GNU core command-line utilities
@@ -27,7 +28,9 @@ brew "moreutils"                      # extra Unix command-line utilities
 brew "pandoc"                         # document conversion tool
 brew "pygments"                       # syntax highlighter used by other tools
 brew "ripgrep"                        # fast recursive text search
+brew "sort"                           # sort
 brew "sc-im"                          # terminal spreadsheet editor
+brew "uniq"                           # unique vaules
 brew "wget"                           # non-interactive download tool
 brew "yazi"                           # terminal file manager
 brew "yq"                             # YAML, JSON, and TOML processor
@@ -42,7 +45,7 @@ brew "gnupg"                          # GPG encryption and signing tools
 
 # runtimes and SDKs
 brew "go"                             # Go toolchain
-brew "oven-sh/bun/bun"                # Bun runtime and package manager
+# brew "oven-sh/bun/bun"                # Bun runtime and package manager
 brew "python"                         # Python runtime and package tooling
 
 # development tooling

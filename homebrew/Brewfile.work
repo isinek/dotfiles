@@ -2,7 +2,9 @@
 
 # runtimes, version managers and SDKs
 brew "asdf"                           # version manager for development runtimes
-brew "dotnet"                         # .NET SDK and CLI
+
+# brew "dotnet"                         # .NET SDK and CLI
+brew "volta"                          # node version package manager
 
 # containers and infrastructure
 brew "colima"                         # lightweight local container runtime
@@ -14,6 +16,9 @@ brew "tailscale"                      # mesh VPN and secure network access
 
 # development tooling
 brew "buf"                            # Protocol Buffers toolkit and linting
+
+# database
+brew "postrgresql"                    # PostgreSQL database and tools
 
 # build and code generation
 brew "nx"                             # monorepo build system CLI

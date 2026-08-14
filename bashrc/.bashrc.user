@@ -8,11 +8,15 @@ path_prepend () {
   esac
 }
 
+path_append () {
+  case ":$PATH:" in
+    *":$1:"*) ;;
+    *) PATH="$PATH:$1" ;;
+  esac
+}
+
 # load aliases
 [ -r ~/.bash_aliases ] && . ~/.bash_aliases
-
-# load work setup
-[ -r ~/.bashrc.work ] && . ~/.bashrc.work
 
 # Don't put duplicate lines in the history and do not add lines that start with a space
 export HISTCONTROL=erasedups:ignoredups:ignorespace
@@ -50,8 +54,24 @@ if command -v hx >/dev/null 2>&1; then
 fi
 # Set the default editor end
 
-# Local tools
-path_prepend "$HOME/tools"
+# Local secrets
+secrets_dir="$HOME/.secrets"
+if [ -d "${secrets_dir}" ]; then
+  for secret_file in "$secrets_dir"/*; do
+    [ -f "$secret_file" ] || continue
+
+    env_var="$(basename "$secret_file")"
+
+    case "$env_var" in
+      ''|*[!A-Za-z0-9_]*|[0-9]*)
+        continue
+        ;;
+    esac
+
+    export "$env_var=$(<"$secret_file")"
+  done
+fi
+# Local secrets end
 
 # HomeBrew
 if command -v brew >/dev/null 2>&1; then
@@ -65,7 +85,7 @@ fi
 
 # coreutils
 if command -v brew >/dev/null 2>&1; then
-  path_prepend "$(brew --prefix coreutils)/libexec/gnubin"
+  path_append "$(brew --prefix coreutils)/libexec/gnubin"
 fi
 # coreutils end
 
@@ -76,23 +96,23 @@ fi
 # starship end
 
 # dotnet
-path_prepend "$HOME/.dotnet/tools"
+path_append "$HOME/.dotnet/tools"
 
 if [ -x "/opt/homebrew/opt/dotnet/libexec/dotnet" ]; then
-  path_prepend "/opt/homebrew/opt/dotnet/libexec"
+  path_append "/opt/homebrew/opt/dotnet/libexec"
   export DOTNET_ROOT="/opt/homebrew/opt/dotnet/libexec"
 elif [ -x "/usr/local/share/dotnet/dotnet" ]; then
-  path_prepend "/usr/local/share/dotnet"
+  path_append "/usr/local/share/dotnet"
   export DOTNET_ROOT="/usr/local/share/dotnet"
 elif [ -x "$HOME/.dotnet/dotnet" ]; then
-  path_prepend "$HOME/.dotnet"
+  path_append "$HOME/.dotnet"
   export DOTNET_ROOT="$HOME/.dotnet"
 fi
 # dotnet end
 
 # gawk
 if command -v brew >/dev/null 2>&1 && ! command -v gawk >/dev/null 2>&1; then
-  path_prepend "$(brew --prefix gawk)/libexec/gnubin"
+  path_append "$(brew --prefix gawk)/libexec/gnubin"
 fi
 # gawk end
 
@@ -127,8 +147,7 @@ fi
 
 # GPG TTY for git signing
 if command -v tty >/dev/null 2>&1; then
-  GPG_TTY="$(tty)"
-  export GPG_TTY
+  export GPG_TTY="$(tty)"
 fi
 # GPG TTY for git signing end
 
@@ -137,3 +156,12 @@ if command -v codex >/dev/null 2>&1; then
   eval "$(codex completion bash)"
 fi
 # codex end
+
+# presenterm
+if command -v presenterm >/dev/null 2>&1; then
+  export PRESENTERM_CONFIG_FILE=~/.config/presenterm/config.yaml
+fi
+# presenterm end
+
+# load work setup
+[ -r ~/.bashrc.work ] && . ~/.bashrc.work

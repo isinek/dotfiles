@@ -64,7 +64,7 @@ language-servers = ["marksman", "harper"]
 
 [[language]]
 name = "protobuf"
-auto-format = true
+auto-format = false
 language-servers = ["buf"]
 
 [[language]]
@@ -130,6 +130,7 @@ language-servers = ["yaml-language-server"]
 
 [language-server.csharp-ls]
 command = "csharp-ls"
+args = ["--loglevel", "warning"]
 timeout = 120
 
 [language-server.buf]
